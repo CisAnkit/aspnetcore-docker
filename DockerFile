@@ -1,0 +1,9 @@
+From mcr.microsoft.com/dotnet/core/sdk:3.0 As build
+WORKDIR /code
+COPY . .
+Run dotnet restore 
+RUN dotnet publish --output /output --configuration Release
+From mcr.microsoft.com/dotnet/core/aspnet:3.0
+COPY --from=build /output /app
+WORKDIR /app
+ENTRYPOINT ["dotnet","AspNetCoreOnDocker.dll"]
